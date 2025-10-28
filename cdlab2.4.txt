@@ -1,0 +1,52 @@
+#include <iostream>
+
+using namespace std;
+
+
+bool isValidStartChar(char ch) {
+    return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_';
+}
+
+
+bool isValidChar(char ch) {
+    return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || ch == '_';
+}
+
+
+bool isValidIdentifier(const char* input) {
+
+    if (input[0] == '\0') {
+        return false;
+    }
+
+
+    if (!isValidStartChar(input[0])) {
+        return false;
+    }
+
+
+    for (int i = 1; input[i] != '\0'; i++) {
+        if (!isValidChar(input[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int main() {
+    char input[100];
+
+
+    cout << "Enter a string to check if it is a valid identifier: ";
+    cin >> input;
+
+
+    if (isValidIdentifier(input)) {
+        cout << input << " is a valid identifier." << endl;
+    } else {
+        cout << input << " is not a valid identifier." << endl;
+    }
+
+    return 0;
+}
