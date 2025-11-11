@@ -1,0 +1,112 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+ 
+int main() {
+    ifstream file("token.txt");
+    if (!file.is_open()) {
+        cout << "Cannot open file!" << endl;
+        return 0;
+    }
+ 
+    string keywords[12] = {
+        "int", "float", "char", "if", "else", "for", "while",
+        "return", "void", "main", "using", "namespace"
+    };
+ 
+    string word = "";
+    char ch;
+    int line = 1;
+ 
+    cout << "Line " << line << ":" << endl;
+ 
+    while (file.get(ch)) {
+ 
+        if (ch == '\n') {
+            if (word != "") {
+                bool isKey = false;
+                for (int i = 0; i < 12; i++) {
+                    if (word == keywords[i]) {
+                        cout << word << " -> keyword" << endl;
+                        isKey = true;
+                        break;
+                    }
+                }
+                if (!isKey) {
+                    if ((word[0] >= 'a' && word[0] <= 'z') || (word[0] >= 'A' && word[0] <= 'Z'))
+                        cout << word << " -> identifier" << endl;
+                    else
+                        cout << word << " -> number" << endl;
+                }
+                word = "";
+            }
+            line++;
+            cout << "\nLine " << line << ":" << endl;
+            continue;
+        }
+ 
+ 
+        if (ch == '"') {
+            string strConst = "\"";
+            while (file.get(ch) && ch != '"') {
+                strConst += ch;
+            }
+            strConst += '"';
+            cout << strConst << " -> string constant" << endl;
+            continue;
+        }
+ 
+ 
+        if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch == '_') {
+            word += ch;
+        } else {
+ 
+            if (word != "") {
+                bool isKey = false;
+                for (int i = 0; i < 12; i++) {
+                    if (word == keywords[i]) {
+                        cout << word << " -> keyword" << endl;
+                        isKey = true;
+                        break;
+                    }
+                }
+                if (!isKey) {
+                    if ((word[0] >= 'a' && word[0] <= 'z') || (word[0] >= 'A' && word[0] <= 'Z'))
+                        cout << word << " -> identifier" << endl;
+                    else
+                        cout << word << " -> number" << endl;
+                }
+                word = "";
+            }
+ 
+ 
+            if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '=' || ch == '<' || ch == '>' || ch == '!')
+                cout << ch << " -> operator" << endl;
+ 
+ 
+            else if (ch == ';' || ch == '(' || ch == ')' || ch == '{' || ch == '}' || ch == ',' || ch == '#')
+                cout << ch << " -> punctuation" << endl;
+        }
+    }
+ 
+    if (word != "") {
+        bool isKey = false;
+        for (int i = 0; i < 12; i++) {
+            if (word == keywords[i]) {
+                cout << word << " -> keyword" << endl;
+                isKey = true;
+                break;
+            }
+        }
+        if (!isKey) {
+            if ((word[0] >= 'a' && word[0] <= 'z') || (word[0] >= 'A' && word[0] <= 'Z'))
+                cout << word << " -> identifier" << endl;
+            else
+                cout << word << " -> number" << endl;
+        }
+    }
+ 
+    file.close();
+    return 0;
+}
